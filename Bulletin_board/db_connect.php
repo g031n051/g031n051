@@ -1,3 +1,5 @@
+<!-- Bulletin_board\db_connect.php -->
+
 <?php
 $db_user = 'root';     // ユーザー名
 $db_pass = ',Ia+iBips3'; // パスワード
