@@ -1,5 +1,3 @@
-<!-- Bulletin_board\db_connect.php -->
-
 <?php
 $db_user = 'root';     // ユーザー名
 $db_pass = ',Ia+iBips3'; // パスワード
@@ -10,56 +8,45 @@ $mysqli = new mysqli('localhost', $db_user, $db_pass, $db_name);
 
 $result_message = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-  /* 名前欄かつメッセージ欄がnullでないとき名前とメッセージをデータベースに登録し、
-  名前orメッセージがnullの時はエラー文を返す */
-  if (!empty($_POST['name']) && !empty($_POST['message'])) {
-    $mysqli->query("insert into `messages` (`name`,`body`) values ('{$_POST['name']}', '{$_POST['message']}')");
-    $result_message = 'データベースに登録しました！';
+  // フォームで受け取ったメッセージをデータベースに登録
+  if (!empty($_POST['message'])) {
+    $mysqli->query("insert into `messages` (`body`) values ('{$_POST['message']}')");
+    $result_message = 'データベースに登録しました！XD';
   } else {
-    $result_message = '名前とコメントを入力してください...';
+    $result_message = 'メッセージを入力してください...XO';
+  }
+
+  // メッセージの削除
+  if (!empty($_POST['del'])) {
+    $mysqli->query("delete from `messages` where `id` = {$_POST['del']}");
+    $result_message = 'メッセージを削除しました;)';
   }
 }
 
-// データベースからメッセージを降順で取得
-$result = $mysqli->query('SELECT * from messages ORDER BY id DESC');
+// データベースからレコード取得
+$result = $mysqli->query('select * from `messages` order by `id` desc');
 ?>
 
 <html>
 <head>
-  <title> 掲示板</title>
   <meta charset="UTF-8">
 </head>
 
-<center>
-  <h1>掲示板</h1>
-  <h2>入力フォーム</h2>
-
-  <br>
-  <form action="db_connect.php" method="post">
-    <p>名前 : <input type="text" name="name" /></p>
-    <p>コメント : <input type="text" name="message" /></p>
-    <input type="submit" value="投稿" />
+<body>
+  <p><?php echo $result_message; ?></p>
+  <form action="" method="post">
+    <input type="text" name="message" />
+    <input type="submit" />
   </form>
 
-  <br>
-  <?php
-  echo $result_message;
-  ?>
-
-  <br>
-  <table class="table" border=1>
-    <tr><th>名前</th><th>コメント</th><th>投稿時間</th></tr>
-
-    <?php foreach ($result as $row){ ?>
-      <tr>
-        <td><?php print($row['name']); ?></td>
-        <td><?php print($row['body']); ?></td>
-        <td><?php print($row['timestamp']); ?></td>
-      </tr>
-    </center>
-    <?php } ?>
-  </table>
-
+  <?php foreach ($result as $row) : ?>
+    <p>
+      <form action="" method="post">
+        <?php echo $row['body']; ?>
+        <input type="hidden" name="del" value="<?php echo $row['id']; ?>" />
+        <input type="submit" value="削除" />
+      </form>
+    </p>
+  <?php endforeach; ?>
 </body>
 </html>
