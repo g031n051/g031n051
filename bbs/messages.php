@@ -99,44 +99,49 @@ if (!$result) {
 <head>
   <title> 掲示板</title>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="http://153.126.145.101/liquid/css/bootstrap.min.css">
 </head>
 
-<center>
-  <h1>掲示板</h1>
-  <h2>入力フォーム</h2>
+<body>
+  <div class="container">
+    <div class="page-header">
+      <center>
+        <h1>掲示板</h1>
+        <h2>入力フォーム</h2>
 
-  <br>
-  <form action="messages.php" method="post">
-    <p>名前 : <input type="text" name="name" /></p>
-    <p>コメント : <input type="text" name="body" /></p>
-    <p>パスワード :　<input type="password" name="password" /></p>
-    <input type="submit" value="投稿" />
-  </form>
-  <br>
+        <br>
+        <form action="messages.php" method="post">
+          <p>名前 : <input type="text" name="name" class="form-control"/></p>
+          <p>コメント : <input type="text" name="body" class="form-control" /></p>
+          <p>パスワード :　<input type="password" name="password" class="form-control" /></p>
+          <input type="submit" value="投稿"  class="btn btn-primary" onclick="check()"/>
+        </form>
+        <br>
 
-  <table class="table" border=1>
-    <tr><th>名前</th><th>コメント</th><th>更新日時</th><th>パスワード</th><th>編集</th>
+        <table class="table" border=1>
+          <tr><th>名前</th><th>コメント</th><th>更新日時</th><th>パスワード</th><th>編集</th>
 
-      <?php foreach ($result as $row){ ?>
-        <tr>
-          <td><?php $name = htmlspecialchars($row['name']); ?>
-            <span><?php echo $name; ?></span></td>
-            <td><?php $body = htmlspecialchars($row['body']); ?>
-              <span><?php echo $body; ?></span></td>
-              <td><?php $timestamp = htmlspecialchars($row['timestamp']); ?>
-                <span><?php echo $timestamp; ?></span></td>
-                <form action="edit_delete_message.php" method="post">
-                  <td><input type="password" name=checkpass /></td>
-                  <td>
-                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>" />
-                    <input type="hidden" name="name" value="<?php echo $row['name']; ?>" />
-                    <input type="hidden" name="body" value="<?php echo $row['body']; ?>" />
-                    <input type="hidden" name="password" value="<?php echo $row['password']; ?>" />
-                    <input type="submit" value="編集" />
-                  </form></td>
-                </tr>
-                <?php } ?>
-              </table>
-            </center>
-          </body>
-          </html>
+            <?php foreach ($result as $row){ ?>
+              <tr>
+                <td><?php $name = htmlspecialchars($row['name']); ?>
+                  <span><?php echo $name; ?></span></td>
+                  <td><?php $body = htmlspecialchars($row['body']); ?>
+                    <span><?php echo $body; ?></span></td>
+                    <td><?php $timestamp = htmlspecialchars($row['timestamp']); ?>
+                      <span><?php echo $timestamp; ?></span></td>
+                      <form action="edit_delete_message.php" method="post">
+                        <td><input type="password" name=checkpass class="form-control" /></td>
+                        <td>
+                          <input type="hidden" name="id" value="<?php echo $row['id']; ?>" />
+                          <input type="hidden" name="name" value="<?php echo $row['name']; ?>" />
+                          <input type="hidden" name="body" value="<?php echo $row['body']; ?>" />
+                          <input type="hidden" name="password" value="<?php echo $row['password']; ?>" />
+                          <input type="submit" value="編集" class="btn btn-primary" />
+                        </form></td>
+                      </tr>
+                      <?php } ?>
+                    </table>
+                  </center>
+                </div>
+                </body>
+                </html>
