@@ -44,16 +44,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <br><br>
   <table class="table" border=1>
-    <tr><th style="width:200px;">コメント</th><th style="width:85px;">編集or削除</th></tr>
+    <tr><th style="width:500px;">コメント</th><th style="width:100px;"></th></tr>
 
     <tr>
       <form action="messages.php" method="post">
-        <td><input type="text" name="upd_body" value="<?php echo $_POST['body']; ?>" /></td>
+        <td><input type="text" name="upd_body" style="width:1000px;" value="<?php echo $_POST['body']; ?>" /></td>
         <td><input type="hidden" name="upd" value="<?php echo $_POST['id']; ?>" />
-          <input type="submit" value="編集" /></form>
+          <input type="submit" value="編集" class="btn btn-primary" /></form>
           <form action="messages.php" method="post">
             <input type="hidden" name="del" value="<?php echo $_POST['id']; ?>" />
-            <input type="submit" value="削除" /></td>
+            <input type="submit" value="削除" class="btn btn-primary" /></td>
           </form>
         </tr>
       </table>
