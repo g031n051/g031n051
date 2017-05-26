@@ -2,7 +2,7 @@
 
 <?php
 $db_user = 'root';     // ユーザー名
-$db_pass = ',Ia+iBips3'; // パスワード
+$db_pass = ''; // パスワード
 $db_name = 'bbs';     // データベース名
 
 // MySQLに接続
@@ -32,11 +32,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
   <title> パスワード確認フォーム</title>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="http://153.126.145.101/liquid/css/bootstrap.min.css">
 </head>
 
 <body>
+  <div class="container">
+      <br>
+        <h1>掲示板</h1>
+        <br><br>
+        <h2>編集フォーム</h2>
+
+        <br><br>
   <table class="table" border=1>
-    <th>コメント</th><th>編集or削除</th>
+    <tr><th style="width:200px;">コメント</th><th style="width:85px;">編集or削除</th></tr>
 
     <tr>
       <form action="messages.php" method="post">
@@ -49,5 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           </form>
         </tr>
       </table>
+    </div>
     </body>
     </html>

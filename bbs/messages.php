@@ -2,7 +2,7 @@
 
 <?php
 $db_user = 'root';     // ユーザー名
-$db_pass = ',Ia+iBips3'; // パスワード
+$db_pass = ''; // パスワード
 $db_name = 'bbs';     // データベース名
 
 // MySQLに接続
@@ -104,22 +104,23 @@ if (!$result) {
 
 <body>
   <div class="container">
-    <div class="page-header">
-      <center>
+      <br>
         <h1>掲示板</h1>
+        <br><br>
         <h2>入力フォーム</h2>
 
         <br>
         <form action="messages.php" method="post">
-          <p>名前 : <input type="text" name="name" class="form-control"/></p>
-          <p>コメント : <input type="text" name="body" class="form-control" /></p>
-          <p>パスワード :　<input type="password" name="password" class="form-control" /></p>
+          <p>名前 : <input type="text" name="name" style="width:400px;" class="form-control"/></p>
+          <p>コメント : <input type="text" name="body" style="width:400px;" class="form-control" /></p>
+          <p>パスワード :　<input type="password" name="password" style="width:100px;" class="form-control" /></p>
           <input type="submit" value="投稿"  class="btn btn-primary" onclick="check()"/>
         </form>
-        <br>
+        <br><br>
 
         <table class="table" border=1>
-          <tr><th>名前</th><th>コメント</th><th>更新日時</th><th>パスワード</th><th>編集</th>
+          <tr><th style="width:200px;">名前</th><th style="width:500px;">コメント</th><th style="width:80px;">更新日時</th>
+            <th style="width:130px;">パスワード</th><th style="width:50px;"></th></tr>
 
             <?php foreach ($result as $row){ ?>
               <tr>
@@ -130,7 +131,7 @@ if (!$result) {
                     <td><?php $timestamp = htmlspecialchars($row['timestamp']); ?>
                       <span><?php echo $timestamp; ?></span></td>
                       <form action="edit_delete_message.php" method="post">
-                        <td><input type="password" name=checkpass class="form-control" /></td>
+                        <td><input type="password" name="checkpass" style="width:100px;" class="form-control" /></td>
                         <td>
                           <input type="hidden" name="id" value="<?php echo $row['id']; ?>" />
                           <input type="hidden" name="name" value="<?php echo $row['name']; ?>" />
@@ -141,7 +142,6 @@ if (!$result) {
                       </tr>
                       <?php } ?>
                     </table>
-                  </center>
                 </div>
                 </body>
                 </html>
