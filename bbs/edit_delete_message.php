@@ -18,8 +18,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // データベースに登録されているパスワードと入力されているパスワードが等しくなければアラート表示
   if ($_POST['password'] !== $_POST['checkpass']){
     print '<script>
-    alert("パスワードが違います");
-    location.href = "javascript:history.back();";
+    var a = decodeURIComponent(location.search);
+    var URL = "http://153.126.145.101/bbs/messages.php"
+    alert("パスワードが間違っています...");
+    location.href = URL + a;
     </script>';
     exit();
   }
