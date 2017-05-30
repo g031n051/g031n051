@@ -15,12 +15,6 @@ if ($mysqli->connect_errno) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-  if(!empty($_GET['checkpass'])){
-    print '<script>
-    alert("パスワードが違います");
-    </script>';
-  }
-
   // データベースに登録文
   if (!empty($_POST['name']) && !empty($_POST['body']) && !empty($_POST['password'])) {
     // XSSの対策
@@ -29,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = $mysqli->real_escape_string($_GET['id']);
     $password = $mysqli->real_escape_string($_POST['password']);
 
-    $insert = $mysqli->query("INSERT INTO messages (name, body, thread_id, password) VALUES ('{$name}', '{$body}', '{$id}', '{$password}')");
+    $insert = $mysqli->query("INSERT INTO `messages` (`name`, `body`, `thread_id`, `password`) VALUES ('{$name}', '{$body}', '{$id}', '{$password}')");
     print '<script>
     alert("コメントを登録しました！");
     </script>';
@@ -37,42 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!$insert) {    // insert文におけるエラー処理
       printf("%s\n", $mysqli->error);
       exit();
-    }
-  }
-
-  // コメントの削除文
-  else if (!empty($_POST['del'])) {
-    $delete = $mysqli->query("DELETE FROM messages WHERE id = {$_POST['del']}");
-    // delete文におけるエラー処理
-    if (!$delete) {
-      printf("%s\n", $mysqli->error);
-      exit();
-    }
-    print '<script>
-    alert("コメントを削除しました！");
-    </script>';
-  }
-
-  // コメントの編集文
-  else if (!empty($_POST['upd'])) {
-    if (!empty($_POST['upd_body'])){
-      // XSSの対策
-      $upd_body = $mysqli->real_escape_string($_POST['upd_body']);
-
-      $update = $mysqli->query("UPDATE  messages SET body='{$upd_body}' WHERE id = {$_POST['upd']}");
-      // update文におけるエラー処理
-      if (!$update) {
-        printf("%s\n", $mysqli->error);
-        exit();
-      }
-      print '<script>
-      alert("コメントを編集しました！");
-      </script>';
-    }
-    else{
-      print '<script>
-      alert("コメントを入力してください...");
-      </script>';
     }
   }
 
@@ -105,7 +63,9 @@ if (!$result) {
 
 <html>
 <head>
-  <title> <?php echo $_GET['thread_name']; ?></title>
+  <?php $thread_name= htmlspecialchars($_GET['thread_name']);?>
+  <?php $id= htmlspecialchars($_GET['id']);?>
+  <title> <?php echo $thread_name; ?></title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="http://153.126.145.101/liquid/css/bootstrap.min.css">
 </head>
@@ -118,7 +78,7 @@ if (!$result) {
     <h2>入力フォーム</h2>
 
     <br>
-    <form action="messages.php?id=<?php echo $_GET['id']; ?>&thread_name=<?php echo $_GET['thread_name']; ?>" method="post">
+    <form action="messages.php?id=<?php echo $id; ?>&thread_name=<?php echo $thread_name; ?>" method="post">
       <p>名前 : <input type="text" name="name" style="width:400px;" class="form-control"/></p>
       <p>コメント : <input type="text" name="body" style="width:400px;" class="form-control" /></p>
       <p>パスワード :　<input type="password" name="password" style="width:100px;" class="form-control" /></p>
@@ -138,14 +98,15 @@ if (!$result) {
                 <span><?php echo $body; ?></span></td>
                 <td><?php $timestamp = htmlspecialchars($row['timestamp']); ?>
                   <span><?php echo $timestamp; ?></span></td>
-                  <form action="edit_delete_message.php?id=<?php echo $_GET['id']; ?>&thread_name=<?php echo $_GET['thread_name']; ?>" method="post">
+
+                  <?php $thread_name= htmlspecialchars($_GET['thread_name']);?>
+                  <form action="edit_delete_message.php?id=<?php echo $id; ?>&thread_name=<?php echo $thread_name; ?>" method="post">
                     <td><input type="password" name="checkpass" style="width:100px;" class="form-control" /></td>
                     <td>
                       <input type="hidden" name="id" value="<?php echo $row['id']; ?>" />
-                      <input type="hidden" name="name" value="<?php echo $row['name']; ?>" />
-                      <input type="hidden" name="body" value="<?php echo $row['body']; ?>" />
-                      <input type="hidden" name="password" value="<?php echo $row['password']; ?>" />
-                      <input type="submit" value="編集" class="btn btn-primary" />
+                      <input type="hidden" name="body" value="<?php echo $body; ?>" />
+                      <input type="submit" name="upd" value="編集" class="btn btn-primary" />
+                      <input type="submit" name="del" value="削除" class="btn btn-primary" />
                     </form></td>
                   </tr>
                   <?php } ?>

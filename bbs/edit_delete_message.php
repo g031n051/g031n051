@@ -15,15 +15,78 @@ if ($mysqli->connect_errno) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-  // データベースに登録されているパスワードと入力されているパスワードが等しくなければアラート表示
-  if ($_POST['password'] !== $_POST['checkpass']){
+  // 削除文
+  if (!empty($_POST['del'])) {
+    // データベースに登録されているパスワードと入力されているパスワードが等しくなければアラート表示
+    $checkpass = $mysqli->real_escape_string($_POST['checkpass']);
+    $delete = $mysqli->query("DELETE FROM `messages` WHERE `id` = {$_POST['id']} AND `password` = '{$checkpass}'");
+
+    $delete_count = $mysqli->affected_rows; // sql文によってdeleteされた件数を取得する
+    if($delete_count >= 1){ // 1件以上の場合
+      print '<script>
+      var a = decodeURIComponent(location.search);
+      var URL = "http://153.126.145.101/bbs/messages.php"
+      alert("コメントを削除しました！");
+      location.href = URL + a;
+      </script>';
+    }else if ($delete_count == 0){ // 0件の場合
+      print '<script>
+      var a = decodeURIComponent(location.search);
+      var URL = "http://153.126.145.101/bbs/messages.php"
+      alert("パスワードが違います...");
+      location.href = URL + a;
+      </script>';
+    }else{
+      // delete文におけるエラー処理
+      printf("%s\n", $mysqli->error);
+      exit();
+    }
+  }
+
+  // 編集ボタンが押された際の、レコード読み込み
+  else if (!empty($_POST['upd'])) {
+    $checkpass = $mysqli->real_escape_string($_POST['checkpass']);
+    $result = $mysqli->query("SELECT * FROM `messages` WHERE `id` = {$_POST['id']} AND `password` = '{$checkpass}'");
+
+    $result_count = $mysqli->affected_rows; // sql文によってselectされた件数を取得する
+    if ($result_count == 0) {   // 0件の場合
+      print '<script>
+      var a = decodeURIComponent(location.search);
+      var URL = "http://153.126.145.101/bbs/messages.php"
+      alert("パスワードが違います...");
+      location.href = URL + a;
+      </script>';
+    }else if ($result_count == -1) {
+      printf("%s\n", $mysqli->error);
+      exit();
+    }
+  }
+
+  else if (!empty($_POST['upd_body'])){
+    // XSSの対策
+    $upd_body = $mysqli->real_escape_string($_POST['upd_body']);
+    $id = $mysqli->real_escape_string($_POST['id']);
+
+    $update = $mysqli->query("UPDATE  `messages` SET `body`='{$upd_body}' WHERE `id` = {$id}");
+    $update_count = $mysqli->affected_rows; // sql文によってupdateされた件数を取得する
+    if ($update_count == 1){ // 1件の場合
+      print '<script>
+      var a = decodeURIComponent(location.search);
+      var URL = "http://153.126.145.101/bbs/messages.php"
+      alert("コメントを編集しました！");
+      location.href = URL + a;
+      </script>';
+    }else{
+      // update文におけるエラー処理
+      printf("%s\n", $mysqli->error);
+      exit();
+    }
+  }
+  else{
     print '<script>
-    var a = decodeURIComponent(location.search);
-    var URL = "http://153.126.145.101/bbs/messages.php"
-    alert("パスワードが間違っています...");
-    location.href = URL + a;
+    alert("コメントを入力してください...！");
+    location.href = history.back();
     </script>';
-    exit();
   }
 }
 
@@ -47,16 +110,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <table class="table" border=1>
       <tr><th style="width:500px;">コメント</th><th style="width:100px;"></th></tr>
 
+      <?php $thread_name= htmlspecialchars($_GET['thread_name']);?>
+      <?php $body= htmlspecialchars($_POST['body']);?>
+      <?php $id= htmlspecialchars($_GET['id']);?>
       <tr>
-        <form action="messages.php?id=<?php echo $_GET['id']; ?>&thread_name=<?php echo $_GET['thread_name']; ?>" method="post">
-          <td><input type="text" name="upd_body" style="width:1000px;" value="<?php echo $_POST['body']; ?>" /></td>
-          <td><input type="hidden" name="upd" value="<?php echo $_POST['id']; ?>" />
-            <input type="submit" value="編集" class="btn btn-primary" /></form>
-
-            <form action="messages.php?id=<?php echo $_GET['id']; ?>&thread_name=<?php echo $_GET['thread_name']; ?>" method="post">
-              <input type="hidden" name="del" value="<?php echo $_POST['id']; ?>" />
-              <input type="submit" value="削除" class="btn btn-primary" /></td>
-            </form>
+        <form action="edit_delete_message.php?id=<?php echo $id; ?>&thread_name=<?php echo $thread_name; ?>" method="post">
+          <td><input type="text" name="upd_body" style="width:1000px;" value="<?php echo $body; ?>" /></td>
+          <td><input type="hidden" name="id" value="<?php echo $_POST['id']; ?>" />
+            <input type="submit" value="編集" class="btn btn-primary" /></td></form>
           </tr>
         </table>
       </div>

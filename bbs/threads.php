@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $mysqli->real_escape_string($_POST['name']);
     $password = $mysqli->real_escape_string($_POST['password']);
 
-    $insert = $mysqli->query("INSERT INTO threads (name, password) VALUES ('{$name}', '{$password}')");
+    $insert = $mysqli->query("INSERT INTO `threads` (`name`, `password`) VALUES ('{$name}', '{$password}')");
     print '<script>
     alert("スレッドを登録しました！");
     </script>';
@@ -35,22 +35,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // 削除文
   else if (!empty($_POST['del'])) {
     // データベースに登録されているパスワードと入力されているパスワードが等しくなければアラート表示
-    if ($_POST['password'] !== $_POST['checkpass']){
-      print '<script>
-      alert("パスワードが違います");
-      location.href = "./threads.php";
-      </script>';
-      exit();
-    }else{
-      $delete = $mysqli->query("DELETE FROM threads WHERE id = {$_POST['del']}");
-      // delete文におけるエラー処理
-      if (!$delete) {
-        printf("%s\n", $mysqli->error);
-        exit();
-      }
+    $checkpass = $mysqli->real_escape_string($_POST['checkpass']);
+    $delete = $mysqli->query("DELETE FROM `threads` WHERE `id` = {$_POST['del']} AND `password` = '{$checkpass}'");
+
+    $delete_count = $mysqli->affected_rows; // sql文によってdeleteされた件数を取得する
+    if($delete_count >= 1){ // 1件以上の場合
       print '<script>
       alert("スレッドを削除しました！");
+      location.href = "./threads.php";
       </script>';
+    }else if ($delete_count == 0){ // 0件の場合
+      print '<script>
+      alert("パスワードが違います...");
+      location.href = "./threads.php";
+      </script>';
+    }else{
+      // delete文におけるエラー処理
+      printf("%s\n", $mysqli->error);
+      exit();
     }
   }
 
@@ -68,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 // データベースからメッセージを降順で取得
-$result = $mysqli->query("SELECT * FROM threads ORDER BY id DESC");
+$result = $mysqli->query("SELECT * FROM `threads` ORDER BY `id` DESC");
 // SELECT文におけるエラー処理
 if (!$result) {
   printf("%s\n", $mysqli->error);
@@ -105,20 +107,21 @@ if (!$result) {
 
         <?php foreach ($result as $row){ ?>
           <tr>
-            <td><?php $name = htmlspecialchars($row['name']); ?>
-              <span><a href="messages.php?id=<?php echo $row['id']; ?>&thread_name=<?php echo $row['name']; ?>"><?php echo $name; ?></a></span></td>
-              <td><?php $timestamp = htmlspecialchars($row['timestamp']); ?>
-                <span><?php echo $timestamp; ?></span></td>
-                <form action="threads.php" method="post">
-                  <td><input type="password" name="checkpass" style="width:100px;" class="form-control" /></td>
-                  <td>
-                    <input type="hidden" name="del" value="<?php echo $row['id']; ?>" />
-                    <input type="hidden" name="password" value="<?php echo $row['password']; ?>" />
-                    <input type="submit" value="削除" class="btn btn-primary" />
-                  </form></td>
-                </tr>
-                <?php } ?>
-              </table>
-            </div>
-          </body>
-          </html>
+            <td><?php $name = htmlspecialchars($row['name']);
+            $thread_name= htmlspecialchars($row['name']);
+            $id= htmlspecialchars($row['id']);?>
+            <span><a href="messages.php?id=<?php echo $id; ?>&thread_name=<?php echo $thread_name; ?>"><?php echo $name; ?></a></span></td>
+            <td><?php $timestamp = htmlspecialchars($row['timestamp']); ?>
+              <span><?php echo $timestamp; ?></span></td>
+              <form action="threads.php" method="post">
+                <td><input type="password" name="checkpass" style="width:100px;" class="form-control" /></td>
+                <td>
+                  <input type="hidden" name="del" value="<?php echo $id; ?>" />
+                  <input type="submit" value="削除" class="btn btn-primary" />
+                </form></td>
+              </tr>
+              <?php } ?>
+            </table>
+          </div>
+        </body>
+        </html>
