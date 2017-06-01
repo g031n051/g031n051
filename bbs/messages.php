@@ -58,62 +58,83 @@ if (!$result) {
   printf("%s\n", $mysqli->error);
   exit();
 }
+$thread_name = $mysqli->query("SELECT `name` FROM `threads` WHERE `id` = {$_GET['id']} LIMIT 1");
+// SELECT文におけるエラー処理
+if (!$result) {
+  printf("%s\n", $mysqli->error);
+  exit();
+}else{
+  $thread_name = $thread_name->fetch_assoc()['name'];
+}
 ?>
 
 
 <html>
 <head>
-  <?php $thread_name= htmlspecialchars($_GET['thread_name']);?>
-  <?php $id= htmlspecialchars($_GET['id']);?>
-  <title> <?php echo $thread_name; ?></title>
+  <?php
+  $id= htmlspecialchars($_GET['id']);
+  ?>
+  <title>
+    <?php
+    echo htmlspecialchars($thread_name);
+    ?>
+  </title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="http://153.126.145.101/liquid/css/bootstrap.min.css">
 </head>
 
 <body>
-  <div class="container">
-    <br>
-    <h1>[<?php echo $_GET['thread_name']; ?>]</h1>
-    <br><br>
-    <h2>入力フォーム</h2>
+  <div class="container"><br>
+    <h1>[ <?php echo htmlspecialchars($thread_name); ?> ]</h1><br><br>
+    <h2>入力フォーム</h2><br>
 
-    <br>
-    <form action="messages.php?id=<?php echo $id; ?>&thread_name=<?php echo $thread_name; ?>" method="post">
+    <form action="messages.php?id=<?php echo $id; ?>" method="post">
       <p>名前 : <input type="text" name="name" style="width:400px;" class="form-control"/></p>
       <p>コメント : <input type="text" name="body" style="width:400px;" class="form-control" /></p>
       <p>パスワード :　<input type="password" name="password" style="width:100px;" class="form-control" /></p>
       <input type="submit" value="投稿"  class="btn btn-primary" onclick="check()"/>
-    </form>
-    <br><br>
+    </form><br><br>
 
     <table class="table" border=1>
-      <tr><th style="width:200px;">名前</th><th style="width:500px;">コメント</th><th style="width:80px;">更新日時</th>
-        <th style="width:130px;">パスワード</th><th style="width:50px;"></th></tr>
+      <tr>
+        <th style="width:200px;">名前</th>
+        <th style="width:500px;">コメント</th>
+        <th style="width:80px;">更新日時</th>
+        <th style="width:130px;">パスワード</th>
+        <th style="width:50px;"></th>
+      </tr>
 
-        <?php foreach ($result as $row){ ?>
-          <tr>
-            <td><?php $name = htmlspecialchars($row['name']); ?>
-              <span><?php echo $name; ?></span></td>
-              <td><?php $body = htmlspecialchars($row['body']); ?>
-                <span><?php echo $body; ?></span></td>
-                <td><?php $timestamp = htmlspecialchars($row['timestamp']); ?>
-                  <span><?php echo $timestamp; ?></span></td>
+      <?php foreach ($result as $row){ ?>
+        <tr>
+          <td>
+            <?php $name = htmlspecialchars($row['name']); ?>
+            <span><?php echo $name; ?></span>
+          </td>
+          <td>
+            <?php $body = htmlspecialchars($row['body']); ?>
+            <span><?php echo $body; ?></span>
+          </td>
+          <td>
+            <?php $timestamp = htmlspecialchars($row['timestamp']); ?>
+            <span><?php echo $timestamp; ?></span>
+          </td>
 
-                  <?php $thread_name= htmlspecialchars($_GET['thread_name']);?>
-                  <form action="edit_delete_message.php?id=<?php echo $id; ?>&thread_name=<?php echo $thread_name; ?>" method="post">
-                    <td><input type="password" name="checkpass" style="width:100px;" class="form-control" /></td>
-                    <td>
-                      <input type="hidden" name="id" value="<?php echo $row['id']; ?>" />
-                      <input type="hidden" name="body" value="<?php echo $body; ?>" />
-                      <input type="submit" name="update" value="編集" class="btn btn-primary" />
-                      <input type="submit" name="del" value="削除" class="btn btn-primary" />
-                    </form></td>
-                  </tr>
-                  <?php } ?>
-                </table>
+          <form action="edit_delete_message.php?id=<?php echo $id; ?>" method="post">
+            <td>
+              <input type="password" name="checkpass" style="width:100px;" class="form-control" />
+            </td>
+            <td>
+              <input type="hidden" name="id" value="<?php echo $row['id']; ?>" />
+              <input type="submit" name="update" value="編集" class="btn btn-primary" />
+              <input type="submit" name="del" value="削除" class="btn btn-primary" />
+            </td>
+          </form>
+        </tr>
+        <?php } ?>
+      </table>
 
-                <p><a href="threads.php">ホームに戻る</a></p>
+      <p><a href="threads.php">ホームに戻る</a></p>
 
-              </div>
-            </body>
-            </html>
+    </div>
+  </body>
+  </html>

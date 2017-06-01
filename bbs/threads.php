@@ -87,41 +87,50 @@ if (!$result) {
 </head>
 
 <body>
-  <div class="container">
-    <br>
-    <h1>掲示板</h1>
-    <br><br>
-    <h2>スレッド一覧</h2>
+  <div class="container"><br>
+    <h1>掲示板</h1><br><br>
+    <h2>スレッド一覧</h2><br>
 
-    <br>
     <form action="threads.php" method="post">
       <p>名前 : <input type="text" name="name" style="width:400px;" class="form-control"/></p>
       <p>パスワード :　<input type="password" name="password" style="width:100px;" class="form-control" /></p>
       <input type="submit" value="投稿"  class="btn btn-primary" onclick="check()"/>
-    </form>
-    <br><br>
+    </form><br><br>
 
     <table class="table" border=1>
-      <tr><th style="width:200px;">名前</th><th style="width:80px;">更新日時</th>
-        <th style="width:130px;">パスワード</th><th style="width:50px;"></th></tr>
+      <tr>
+        <th style="width:200px;">名前</th>
+        <th style="width:80px;">更新日時</th>
+        <th style="width:130px;">パスワード</th>
+        <th style="width:50px;"></th>
+      </tr>
 
-        <?php foreach ($result as $row){ ?>
-          <tr>
-            <td><?php $name = htmlspecialchars($row['name']);
+      <?php foreach ($result as $row){ ?>
+        <tr>
+          <td>
+            <?php
+            $name = htmlspecialchars($row['name']);
             $thread_name= htmlspecialchars($row['name']);
-            $id= htmlspecialchars($row['id']);?>
-            <span><a href="messages.php?id=<?php echo $id; ?>&thread_name=<?php echo $thread_name; ?>"><?php echo $name; ?></a></span></td>
-            <td><?php $timestamp = htmlspecialchars($row['timestamp']); ?>
-              <span><?php echo $timestamp; ?></span></td>
-              <form action="threads.php" method="post">
-                <td><input type="password" name="checkpass" style="width:100px;" class="form-control" /></td>
-                <td>
-                  <input type="hidden" name="del" value="<?php echo $id; ?>" />
-                  <input type="submit" value="削除" class="btn btn-primary" />
-                </form></td>
-              </tr>
-              <?php } ?>
-            </table>
-          </div>
-        </body>
-        </html>
+            $id= htmlspecialchars($row['id']);
+            ?>
+            <span><a href="messages.php?id=<?php echo $id; ?>"><?php echo $name; ?></a></span>
+          </td>
+          <td>
+            <?php $timestamp = htmlspecialchars($row['timestamp']); ?>
+            <span><?php echo $timestamp; ?></span>
+          </td>
+          <form action="threads.php" method="post">
+            <td>
+              <input type="password" name="checkpass" style="width:100px;" class="form-control" />
+            </td>
+            <td>
+              <input type="hidden" name="del" value="<?php echo $id; ?>" />
+              <input type="submit" value="削除" class="btn btn-primary" />
+            </td>
+          </form>
+        </tr>
+        <?php } ?>
+      </table>
+    </div>
+  </body>
+  </html>

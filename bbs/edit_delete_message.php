@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // 編集ボタンが押された際の、レコード読み込み
   else if (!empty($_POST['update'])) {
     $checkpass = $mysqli->real_escape_string($_POST['checkpass']);
-    $result = $mysqli->query("SELECT * FROM `messages` WHERE `id` = {$_POST['id']} AND `password` = '{$checkpass}'");
+    $result = $mysqli->query("SELECT * FROM `messages` WHERE `id` = {$_POST['id']} AND `password` = '{$checkpass}' LIMIT 1");
 
     $result_count = $mysqli->affected_rows; // sql文によってselectされた件数を取得する
     if ($result_count == 0) {   // 0件の場合
@@ -100,26 +100,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 
 <body>
-  <div class="container">
-    <br>
-    <h1>掲示板</h1>
-    <br><br>
-    <h2>編集フォーム</h2>
+  <div class="container"><br>
+    <h1>掲示板</h1><br><br>
+    <h2>編集フォーム</h2><br><br>
 
-    <br><br>
     <table class="table" border=1>
-      <tr><th style="width:500px;">コメント</th><th style="width:100px;"></th></tr>
+      <tr>
+        <th style="width:500px;">コメント</th>
+        <th style="width:100px;"></th>
+      </tr>
 
-      <?php $thread_name= htmlspecialchars($_GET['thread_name']);?>
-      <?php $body= htmlspecialchars($_POST['body']);?>
+      <?php $body= htmlspecialchars($result->fetch_assoc()['body']);?>
       <?php $id= htmlspecialchars($_GET['id']);?>
       <tr>
-        <form action="edit_delete_message.php?id=<?php echo $id; ?>&thread_name=<?php echo $thread_name; ?>" method="post">
-          <td><input type="text" name="update_body" style="width:1000px;" value="<?php echo $body; ?>" /></td>
-          <td><input type="hidden" name="id" value="<?php echo $_POST['id']; ?>" />
-            <input type="submit" value="編集" class="btn btn-primary" /></td></form>
-          </tr>
-        </table>
-      </div>
-    </body>
-    </html>
+        <form action="edit_delete_message.php?id=<?php echo $id; ?>" method="post">
+          <td>
+            <input type="text" name="update_body" style="width:1000px;" value="<?php echo $body; ?>" />
+          </td>
+          <td>
+            <input type="hidden" name="id" value="<?php echo $_POST['id']; ?>" />
+            <input type="submit" value="編集" class="btn btn-primary" />
+          </td>
+        </form>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>
