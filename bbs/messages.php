@@ -105,7 +105,7 @@ if (!$result) {
                     <td>
                       <input type="hidden" name="id" value="<?php echo $row['id']; ?>" />
                       <input type="hidden" name="body" value="<?php echo $body; ?>" />
-                      <input type="submit" name="upd" value="編集" class="btn btn-primary" />
+                      <input type="submit" name="update" value="編集" class="btn btn-primary" />
                       <input type="submit" name="del" value="削除" class="btn btn-primary" />
                     </form></td>
                   </tr>

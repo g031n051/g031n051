@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   }
 
   // 編集ボタンが押された際の、レコード読み込み
-  else if (!empty($_POST['upd'])) {
+  else if (!empty($_POST['update'])) {
     $checkpass = $mysqli->real_escape_string($_POST['checkpass']);
     $result = $mysqli->query("SELECT * FROM `messages` WHERE `id` = {$_POST['id']} AND `password` = '{$checkpass}'");
 
@@ -62,12 +62,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
   }
 
-  else if (!empty($_POST['upd_body'])){
+  else if (!empty($_POST['update_body'])){
     // XSSの対策
-    $upd_body = $mysqli->real_escape_string($_POST['upd_body']);
+    $update_body = $mysqli->real_escape_string($_POST['update_body']);
     $id = $mysqli->real_escape_string($_POST['id']);
 
-    $update = $mysqli->query("UPDATE  `messages` SET `body`='{$upd_body}' WHERE `id` = {$id}");
+    $update = $mysqli->query("UPDATE  `messages` SET `body`='{$update_body}' WHERE `id` = {$id}");
     $update_count = $mysqli->affected_rows; // sql文によってupdateされた件数を取得する
     if ($update_count == 1){ // 1件の場合
       print '<script>
@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <?php $id= htmlspecialchars($_GET['id']);?>
       <tr>
         <form action="edit_delete_message.php?id=<?php echo $id; ?>&thread_name=<?php echo $thread_name; ?>" method="post">
-          <td><input type="text" name="upd_body" style="width:1000px;" value="<?php echo $body; ?>" /></td>
+          <td><input type="text" name="update_body" style="width:1000px;" value="<?php echo $body; ?>" /></td>
           <td><input type="hidden" name="id" value="<?php echo $_POST['id']; ?>" />
             <input type="submit" value="編集" class="btn btn-primary" /></td></form>
           </tr>
