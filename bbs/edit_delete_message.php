@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
   }
 
-  // 編集ボタンが押された際の、レコード読み込み
+  // 編集ボタンが押された際のレコード読み込み
   else if (!empty($_POST['update'])) {
     $checkpass = $mysqli->real_escape_string($_POST['checkpass']);
     $result = $mysqli->query("SELECT * FROM `messages` WHERE `id` = {$_POST['id']} AND `password` = '{$checkpass}' LIMIT 1");
