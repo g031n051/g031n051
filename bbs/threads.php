@@ -97,7 +97,7 @@ if (!$result) {
       <input type="submit" value="投稿"  class="btn btn-primary" onclick="check()"/>
     </form><br><br>
 
-    <table class="table" border=1>
+    <table class="table table-bordered table-striped" border=1>
       <tr>
         <th style="width:200px;">名前</th>
         <th style="width:80px;">更新日時</th>

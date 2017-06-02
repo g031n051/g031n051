@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <h1>掲示板</h1><br><br>
     <h2>編集フォーム</h2><br><br>
 
-    <table class="table" border=1>
+    <table class="table table-bordered table-striped" border=1>
       <tr>
         <th style="width:500px;">コメント</th>
         <th style="width:100px;"></th>
