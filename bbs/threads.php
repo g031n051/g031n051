@@ -125,7 +125,7 @@ if (!$result) {
             </td>
             <td>
               <input type="hidden" name="del" value="<?php echo $id; ?>" />
-              <input type="submit" value="削除" class="btn btn-primary" />
+              <input type="submit" value="削除" class="btn btn-danger" />
             </td>
           </form>
         </tr>

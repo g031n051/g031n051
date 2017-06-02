@@ -102,6 +102,7 @@ if (!$result) {
         <th style="width:80px;">更新日時</th>
         <th style="width:130px;">パスワード</th>
         <th style="width:50px;"></th>
+        <th style="width:50px;"></th>
       </tr>
 
       <?php foreach ($result as $row){ ?>
@@ -126,8 +127,10 @@ if (!$result) {
             <td>
               <input type="hidden" name="id" value="<?php echo $row['id']; ?>" />
               <input type="submit" name="update" value="編集" class="btn btn-primary" />
-              <input type="submit" name="del" value="削除" class="btn btn-primary" />
             </td>
+            <td>
+            <input type="submit" name="del" value="削除" class="btn btn-danger" />
+          </td>
           </form>
         </tr>
         <?php } ?>
