@@ -13,28 +13,43 @@ if ($mysqli->connect_errno) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-  // 登録文
-  if (!empty($_POST['name']) && !empty($_POST['password'])) {
-    // XSSの対策
-    $name = $mysqli->real_escape_string($_POST['name']);
-    $password = $mysqli->real_escape_string($_POST['password']);
-
-    $insert = $mysqli->query("INSERT IGNORE INTO `account` (`name`, `password`) VALUES ('{$name}', '{$password}')");
-
-    $insert_count = $mysqli->affected_rows; // sql文によってinsertされた件数を取得する
-    if($insert_count >= 1){
+  if(isset($_POST["signUp"])){
+    if(empty($_POST['userid'])){
       print '<script>
-      alert("アカウントを登録しました！");
-      location.href = "./MainMenu.php";
+      alert("名前を入力してください。");
+      location.href = "javascript:history.back();"
       </script>';
-    }else if($insert_count == 0){
+    } else if(empty($_POST['password'])){
       print '<script>
-      alert("同一の名前が存在します。\n別の名前を入力してください。");
+      alert("パスワードを入力してください。");
+      location.href = "javascript:history.back();"
       </script>';
-    }else{
-      // insert文におけるエラー処理
-      printf("%s\n", $mysqli->error);
-      exit();
+    }
+
+    // 登録文
+    if (!empty($_POST['userid']) && !empty($_POST['password'])) {
+      // XSSの対策
+      $userid = $mysqli->real_escape_string($_POST['userid']);
+      $password = $mysqli->real_escape_string($_POST['password']);
+
+      $insert = $mysqli->query("INSERT IGNORE INTO `account` (`userID`, `password`) VALUES ('{$userid}', '{$password}')");
+
+      $insert_count = $mysqli->affected_rows; // sql文によってinsertされた件数を取得する
+      if($insert_count >= 1){
+        print '<script>
+        alert("アカウントを登録しました！");
+        location.href = "./MainMenu.php";
+        </script>';
+      }else if($insert_count == 0){
+        print '<script>
+        alert("同一の名前が存在します。\n別の名前を入力してください。");
+        location.href = "javascript:history.back();";
+        </script>';
+      }else{
+        // insert文におけるエラー処理
+        printf("%s\n", $mysqli->error);
+        exit();
+      }
     }
   }
 }
@@ -53,9 +68,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <h1>ツボツボGO</h1><br><br>
 
     <form action="" method="post">
-      <p>NAME : <input type="text" name="name" style="width:400px;" class="form-control"/></p>
+      <p>ユーザID : <input type="text" name="userid" style="width:400px;" class="form-control"/></p>
       <p>PASSWORD :　<input type="password" name="password" style="width:100px;" class="form-control" /></p>
-      <input type="submit" value="アカウント登録"  class="btn btn-primary" onclick="check()"/>
+      <input type="submit" name="signUp"value="アカウント登録"  class="btn btn-primary" onclick="check()"/>
     </form><br><br>
 
   </div>
