@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $stmt->execute();
 
       //結果を保存
-      $stmt->store_result();
+      $stmt->store_result();a
       //結果の行数が1だったら成功
       if($stmt->num_rows == 1){
         $stmt->bind_result($pass);

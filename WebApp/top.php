@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>ツボツボGO</title>
+  <title>トップメニュー</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="http://153.126.145.101/liquid/css/bootstrap.min.css">
 </head>

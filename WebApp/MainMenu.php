@@ -9,7 +9,7 @@
   <div class="container"><br>
     <h1>ツボツボGO</h1><br><br>
 
-    <form action="search.php" method="post">
+    <form action="search_efficacy.php" method="post">
       <input type="submit" value="ツボを探す"  class="btn btn-primary" onclick="check()"/>
     </form>
 
