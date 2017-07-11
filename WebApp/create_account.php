@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   if(isset($_POST["signUp"])){
     if(empty($_POST['userid'])){
       print '<script>
-      alert("名前を入力してください。");
+      alert("ユーザIDを入力してください。");
       location.href = "javascript:history.back();"
       </script>';
     } else if(empty($_POST['password'])){
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <form action="" method="post">
       <p>ユーザID : <input type="text" name="userid" style="width:400px;" class="form-control"/></p>
-      <p>PASSWORD :　<input type="password" name="password" style="width:100px;" class="form-control" /></p>
+      <p>パスワード :　<input type="password" name="password" style="width:100px;" class="form-control" /></p>
       <input type="submit" name="signUp"value="アカウント登録"  class="btn btn-primary" onclick="check()"/>
     </form><br><br>
 

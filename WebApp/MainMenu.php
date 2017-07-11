@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+// ログイン状態のチェック
+if (!isset($_SESSION["USERID"])) {
+  header("Location: logout.php");
+  exit;
+}
+
+?>
+
 <html>
 <head>
   <title>メインメニュー</title>
@@ -8,6 +19,12 @@
 <body>
   <div class="container"><br>
     <h1>ツボツボGO</h1><br><br>
+
+    <p>ようこそ<?=htmlspecialchars($_SESSION["USERID"], ENT_QUOTES); ?>さん</p>
+    <ul>
+      <li><a href="logout.php">ログアウト</a></li>
+    </ul>
+
 
     <form action="search_efficacy.php" method="post">
       <input type="submit" value="ツボを探す"  class="btn btn-primary" onclick="check()"/>
