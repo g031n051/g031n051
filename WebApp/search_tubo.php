@@ -11,31 +11,20 @@ if ($mysqli->connect_errno) {
   exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-  if (!empty($_POST['name'])) {
-    $name = $mysqli->real_escape_string($_POST['name']);
-
-    $result = $mysqli->query("SELECT `name`,`category` FROM `tubo` WHERE `efficacy` = '{$name}'");
-    // SELECT文におけるエラー処理
-    if (!$result) {
-      printf("%s\n", $mysqli->error);
-      exit();
-    }
-  }
-  else{
-    print '<script>
-    alert("そのような場所は存在しません");
-    location.href = history.back();
-    </script>';
-  }
+// データベースからメッセージを降順で取得
+$efficacy = $mysqli->real_escape_string($_GET['efficacy']);
+$result = $mysqli->query("SELECT `name`,`category`,`id` FROM `tubo` WHERE `efficacy` = '{$efficacy}'");
+// SELECT文におけるエラー処理
+if (!$result) {
+  printf("%s\n", $mysqli->error);
+  exit();
 }
 ?>
 
 
 <html>
 <head>
-  <title></title>
+  <title> ツボを探す</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="http://153.126.145.101/liquid/css/bootstrap.min.css">
 </head>
@@ -44,14 +33,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <div class="container"><br>
     <h1>ツボツボGO</h1><br><br>
 
-    <form action="search_efficacy.php" method="post">
-      <input type="submit" value="ツボを探す"  class="btn btn-primary" onclick="check()"/>
-    </form>
+    <table class="table table-bordered table-striped" border=1>
+      <tr>
+        <th><?php echo $efficacy; ?>に効くツボ</th>
+        <th>カテゴリー</th>
+      </tr>
 
-    <form action="favorite.php" method="post">
-      <input type="submit" value="お気に入りリスト"  class="btn btn-primary" onclick="check()"/>
-    </form>
-
-  </div>
-</body>
-</html>
+      <?php foreach ($result as $row){ ?>
+        <tr>
+          <td>
+            <?php
+            $name = htmlspecialchars($row['name']);
+            $thread_name= htmlspecialchars($row['name']);
+            $id= htmlspecialchars($row['id']);
+            ?>
+            <span><a href="search_overview.php?id=<?php echo $id; ?>"><?php echo $name; ?></a></span>
+          </td>
+          <td>
+            <?php
+            $category = htmlspecialchars($row['category']);
+            echo $category;
+            ?>
+          </td>
+        </tr>
+        <?php } ?>
+      </table>
+    </div>
+  </body>
+  </html>

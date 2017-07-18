@@ -12,7 +12,7 @@ if ($mysqli->connect_errno) {
 }
 
 // データベースからメッセージを降順で取得
-$result = $mysqli->query("SELECT DISTINCT * FROM `tubo`");
+$result = $mysqli->query("SELECT DISTINCT `efficacy` FROM `tubo`");
 // SELECT文におけるエラー処理
 if (!$result) {
   printf("%s\n", $mysqli->error);
@@ -41,11 +41,9 @@ if (!$result) {
         <tr>
           <td>
             <?php
-            $name = htmlspecialchars($row['name']);
-            $thread_name= htmlspecialchars($row['name']);
-            $id= htmlspecialchars($row['id']);
+            $efficacy = htmlspecialchars($row['efficacy']);
             ?>
-            <span><a href="messages.php?id=<?php echo $id; ?>"><?php echo $name; ?></a></span>
+            <span><a href="search_tubo.php?efficacy=<?php echo $efficacy; ?>"><?php echo $efficacy; ?></a></span>
           </td>
         </tr>
         <?php } ?>
