@@ -11,7 +11,7 @@ if ($mysqli->connect_errno) {
   exit();
 }
 
-// データベースからメッセージを降順で取得
+// データベースからツボ一覧を取得
 $efficacy = $mysqli->real_escape_string($_GET['efficacy']);
 $result = $mysqli->query("SELECT `name`,`category`,`id` FROM `tubo` WHERE `efficacy` = '{$efficacy}'");
 // SELECT文におけるエラー処理
@@ -54,10 +54,16 @@ if (!$result) {
             $category = htmlspecialchars($row['category']);
             echo $category;
             ?>
+            <br>
           </td>
         </tr>
         <?php } ?>
       </table>
+
+      <br>
+      <p><a class="btn btn-primary" href="http://153.126.145.101/WebApp/search_efficacy.php">効力一覧に戻る</a></p>
+      <p><a class="btn btn-primary" href="http://153.126.145.101/WebApp/MainMenu.php">メインメニューに戻る</a></p>
+
     </div>
   </body>
   </html>

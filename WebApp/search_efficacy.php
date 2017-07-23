@@ -48,6 +48,10 @@ if (!$result) {
         </tr>
         <?php } ?>
       </table>
+
+      <br>
+      <p><a class="btn btn-primary" href="http://153.126.145.101/WebApp/MainMenu.php">メインメニューに戻る</a></p>
+
     </div>
   </body>
   </html>
