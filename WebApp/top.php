@@ -7,11 +7,16 @@
 
 <body>
   <div class="container"><br>
-    <h1>ツボツボGO</h1><br><br>
+    <?php
+    echo '<img src="http://153.126.145.101/WebApp/get_img.php?name=ツボツボGO"/>';
+    echo '<img src="http://153.126.145.101/WebApp/get_img.php?name=ツボツボ"/>';
+    ?><br><br>
 
-    <form action="login_account.php" method="post">
+    <h3>トップ</h3><br><br>
+
+    <form action="login_form.php" method="post">
       <input type="submit" value="ログイン"  class="btn btn-primary" onclick="check()"/>
-    </form>
+    </form><br>
 
     <form action="create_account.php" method="post">
       <input type="submit" value="アカウント登録"  class="btn btn-primary" onclick="check()"/>

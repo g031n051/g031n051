@@ -1,11 +1,14 @@
 <?php
 session_start();
 
-// // ログイン状態のチェック
-// if (!isset($_SESSION["USERID"])) {
-//   header("Location: logout.php");
-//   exit;
-// }
+header("Content-type: text/html; charset=utf-8");
+
+// ログイン状態のチェック
+if (!isset($_SESSION["account"])) {
+  header("Location: login_form.php");
+  exit();
+}
+$account = $_SESSION['account'];
 
 ?>
 
@@ -18,21 +21,24 @@ session_start();
 
 <body>
   <div class="container"><br>
-    <h1>ツボツボGO</h1><br><br>
+    <?php
+    echo '<img src="http://153.126.145.101/WebApp/get_img.php?name=ツボツボGO"/>';
+    echo '<img src="http://153.126.145.101/WebApp/get_img.php?name=ツボツボ"/>';
+    ?><br><br>
 
-    <p>ようこそ<?=htmlspecialchars($_SESSION["USERID"], ENT_QUOTES); ?>さん</p>
-    <ul>
-      <li><a href="logout.php">ログアウト</a></li>
-    </ul>
+    <h3>メインメニュー</h3><br><br>
 
+    <h5><?="<p>".htmlspecialchars($account,ENT_QUOTES)."さん、こんにちは！</p>";?></h5><br>
 
     <form action="search_efficacy.php" method="post">
       <input type="submit" value="ツボを探す"  class="btn btn-primary" onclick="check()"/>
-    </form>
+    </form><br>
 
     <form action="favorite.php" method="post">
       <input type="submit" value="お気に入りリスト"  class="btn btn-primary" onclick="check()"/>
-    </form>
+    </form><br><br>
+
+    <a href="logout.php">ログアウト</a>
 
   </div>
 </body>

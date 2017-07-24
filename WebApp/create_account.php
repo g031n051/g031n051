@@ -31,14 +31,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       // XSSの対策
       $userid = $mysqli->real_escape_string($_POST['userid']);
       $password = $mysqli->real_escape_string($_POST['password']);
+      $password_hash =  password_hash($password, PASSWORD_DEFAULT);
 
-      $insert = $mysqli->query("INSERT IGNORE INTO `account` (`userID`, `password`) VALUES ('{$userid}', '{$password}')");
+      $insert = $mysqli->query("INSERT IGNORE INTO `account` (`account`, `password`) VALUES ('{$userid}', '{$password_hash}')");
 
       $insert_count = $mysqli->affected_rows; // sql文によってinsertされた件数を取得する
-      if($insert_count >= 1){
+      if($insert_count == 1){
         print '<script>
-        alert("アカウントを登録しました！");
-        location.href = "./MainMenu.php";
+        alert("アカウントを登録しました！ログインしてください。");
+        location.href = "./login_form.php";
         </script>';
       }else if($insert_count == 0){
         print '<script>
@@ -65,13 +66,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
   <div class="container"><br>
-    <h1>ツボツボGO</h1><br><br>
+    <?php
+    echo '<img src="http://153.126.145.101/WebApp/get_img.php?name=ツボツボGO"/>';
+    echo '<img src="http://153.126.145.101/WebApp/get_img.php?name=ツボツボ"/>';
+    ?><br><br>
+
+<h3>アカウント登録</h3><br><br>
 
     <form action="" method="post">
-      <p>ユーザID : <input type="text" name="userid" style="width:400px;" class="form-control"/></p>
-      <p>パスワード :　<input type="password" name="password" style="width:100px;" class="form-control" /></p>
+      <p>ユーザID：<input type="text" name="userid" size="50"　class="form-control" /></p>
+      <p>パスワード：<input type="password" name="password" size="20"　class="form-control" /></p><br><br>
       <input type="submit" name="signUp"value="アカウント登録"  class="btn btn-primary" onclick="check()"/>
-    </form><br><br>
+    </form><br>
+
+    <p><a class="btn btn-primary" href="http://153.126.145.101/WebApp/top.php">トップに戻る</a></p>
 
   </div>
 </body>

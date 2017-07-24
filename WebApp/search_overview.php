@@ -3,6 +3,18 @@ $db_user = 'root';     // ユーザー名
 $db_pass = ',Ia+iBips3'; // パスワード
 $db_name = 'WebApp';     // データベース名
 
+session_start();
+
+header("Content-type: text/html; charset=utf-8");
+
+// ログイン状態のチェック
+if (!isset($_SESSION["account"])) {
+  header("Location: login_form.php");
+  exit();
+}
+$account = $_SESSION['account'];
+
+
 // MySQLに接続
 $mysqli = new mysqli('localhost', $db_user, $db_pass, $db_name);
 // データベース接続におけるエラー処理
@@ -44,7 +56,11 @@ if (!$result) {
 
 <body>
   <div class="container"><br>
-    <h1>ツボツボGO</h1><br><br>
+    <?php
+    echo '<img src="http://153.126.145.101/WebApp/get_img.php?name=ツボツボGO"/>';
+    echo '<img src="http://153.126.145.101/WebApp/get_img.php?name=ツボツボ"/>';
+    ?><br><br>
+
     <h1>[ <?php echo htmlspecialchars($thread_name); ?> ]</h1><br>
     <h4>(
       <?php foreach ($result as $row){ ?>
@@ -54,10 +70,10 @@ if (!$result) {
 
           <table class="table table-bordered table-striped" border=1>
             <tr>
-              <th style="width:200px;">効能</th>
-              <th style="width:500px;">ツボの押し方</th>
-              <th style="width:80px;">場所</th>
-              <th style="width:130px;">図解</th>
+              <th>効能</th>
+              <th>ツボの押し方</th>
+              <th>場所</th>
+              <th>図解</th>
             </tr>
 
             <tr>
@@ -74,7 +90,9 @@ if (!$result) {
                 <span><?php echo $place; ?></span>
               </td>
               <td>
-
+                <?php
+                echo '<img src="http://153.126.145.101/WebApp/get_img.php?name='.$thread_name.'"/>';
+                ?>
               </td>
             </tr>
             <?php } ?>
