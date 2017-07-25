@@ -43,17 +43,11 @@ if(empty($_POST)) {
   //アカウント入力判定
   if ($account == ''):
     $errors['account'] = "アカウントが入力されていません。";
-    elseif(mb_strlen($account)>10):
-      $errors['account_length'] = "アカウントは10文字以内で入力して下さい。";
     endif;
 
     //パスワード入力判定
     if ($password == ''):
       $errors['password'] = "パスワードが入力されていません。";
-      elseif(!preg_match('/^[0-9a-zA-Z]{5,30}$/', $_POST["password"])):
-        $errors['password_length'] = "パスワードは半角英数字の5文字以上30文字以下で入力して下さい。";
-      else:
-        $password_hide = str_repeat('*', strlen($password));
       endif;
 
     }
@@ -127,7 +121,7 @@ if(empty($_POST)) {
           <form action="login_form.php" method="post">
             <input type="submit" value="戻る" class="btn btn-primary" onclick="check()" />
           </form>
-          
+
         <?php endif; ?>
 
       </div>

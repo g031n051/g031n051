@@ -98,7 +98,11 @@ if (!$result) {
             <?php } ?>
           </table>
 
-          <br>
+          <center>
+            <p><a class="btn btn-primary" href="http://153.126.145.101/WebApp/add_favorite.php?id=<?php echo $id; ?>">お気に入りリストに追加</a></p>
+          </center>
+
+          <br><br>
           <p><a class="btn btn-primary" href="javascript:history.back()">ツボ一覧に戻る</a></p>
           <p><a class="btn btn-primary" href="http://153.126.145.101/WebApp/search_efficacy.php">効力一覧に戻る</a></p>
           <p><a class="btn btn-primary" href="http://153.126.145.101/WebApp/MainMenu.php">メインメニューに戻る</a></p>
