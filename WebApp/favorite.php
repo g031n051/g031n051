@@ -24,8 +24,7 @@ if ($mysqli->connect_errno) {
 }
 
 // データベースからツボ一覧を取得
-$efficacy = $mysqli->real_escape_string($_GET['efficacy']);
-$result = $mysqli->query("SELECT `name`,`category`,`id` FROM `tubo` WHERE `efficacy` = '{$efficacy}'");
+$result = $mysqli->query("SELECT `tubo`.`id`,`tubo`.`name`,`tubo`.`efficacy` FROM `tubo` INNER JOIN `favorite` ON `tubo`.`id` = `favorite`.`tubo_id` WHERE `favorite`.`account` = '{$account}' ORDER BY `favorite`.`id` DESC");
 // SELECT文におけるエラー処理
 if (!$result) {
   printf("%s\n", $mysqli->error);
@@ -61,15 +60,14 @@ if (!$result) {
           <td>
             <?php
             $name = htmlspecialchars($row['name']);
-            $thread_name= htmlspecialchars($row['name']);
-            $id= htmlspecialchars($row['id']);
+            $id = htmlspecialchars($row['id']);
             ?>
-            <span><a href="search_overview.php?id=<?php echo $id; ?>"><?php echo $name; ?></a></span>
+            <span><a href="favorite_tubo.php?id=<?php echo $id; ?>"><?php echo $name; ?></a></span>
           </td>
           <td>
             <?php
-            $category = htmlspecialchars($row['category']);
-            echo $category;
+            $efficacy = htmlspecialchars($row['efficacy']);
+            echo $efficacy;
             ?>
             <br>
           </td>
