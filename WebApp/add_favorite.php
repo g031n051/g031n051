@@ -26,18 +26,26 @@ if ($mysqli->connect_errno) {
 
 // データベースからお気に入りリストを取得
 $tubo_id = $mysqli->real_escape_string($_GET['id']);
-$insert = $mysqli->query("INSERT INTO `favorite` (`account`, `tubo_id`) VALUES ('{$account}', '{$tubo_id}')");
-$insert_count = $mysqli->affected_rows; // sql文によってinsertされた件数を取得する
-if($insert_count == 1){
+$result = $mysqli->query("SELECT * FROM `favorite` WHERE `account` = '{$account}' AND `tubo_id` = '{$tubo_id}'");
+$result_count = $mysqli->affected_rows; // sql文によってresultされた件数を取得する
+if($result_count == 1){
   print '<script>
-  alert("お気に入りリストに追加しました！");
+  alert("既にお気に入りリストに登録されています。");
   location.href = "javascript:history.back();";
   </script>';
-}else if($insert_count == 0){
-  print '<script>
-  alert("同一の名前が存在します。\n別の名前を入力してください。");
-  location.href = "javascript:history.back();";
-  </script>';
+}else if($result_count == 0){
+  $insert = $mysqli->query("INSERT INTO `favorite` (`account`, `tubo_id`) VALUES ('{$account}', '{$tubo_id}')");
+  $insert_count = $mysqli->affected_rows; // sql文によってinsertされた件数を取得する
+  if($insert_count == 1){
+    print '<script>
+    alert("お気に入りリストに追加しました！");
+    location.href = "javascript:history.back();";
+    </script>';
+  }else{
+    // insert文におけるエラー処理
+    printf("%s\n", $mysqli->error);
+    exit();
+  }
 }else{
   // insert文におけるエラー処理
   printf("%s\n", $mysqli->error);
