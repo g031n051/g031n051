@@ -25,15 +25,9 @@ if ($mysqli->connect_errno) {
 
 
 // データベースからお気に入りリストを取得
-$id = $mysqli->real_escape_string($_GET['id']);
-$result = $mysqli->query("SELECT `favorite` FROM `account` WHERE `account` = {$account}");
-$update = $mysqli->query("UPDATE `account` SET `favorite` = {$result}+','+{$id} WHERE `account` = {$account}");
-// SELECT文におけるエラー処理
-if (!$result) {
-  printf("%s\n", $mysqli->error);
-  exit();
-}
-$update_count = $mysqli->affected_rows; // sql文によってinsertされた件数を取得する
+$tubo_id = $mysqli->real_escape_string($_GET['id']);
+$insert = $mysqli->query("INSERT INTO `favorite` (`account`, `tubo_id`) VALUES ('{$account}', '{$tubo_id}')");
+$insert_count = $mysqli->affected_rows; // sql文によってinsertされた件数を取得する
 if($insert_count == 1){
   print '<script>
   alert("お気に入りリストに追加しました！");
