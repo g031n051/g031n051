@@ -53,6 +53,7 @@ if (!$result) {
       <tr>
         <th>名前</th>
         <th>効力</th>
+        <th></th>
       </tr>
 
       <?php foreach ($result as $row){ ?>
@@ -70,6 +71,9 @@ if (!$result) {
             echo $efficacy;
             ?>
             <br>
+          </td>
+          <td>
+            <span><a href="del_favorite.php?id=<?php echo $id; ?>" class="btn btn-danger">削除</a></span>
           </td>
         </tr>
         <?php } ?>
